@@ -1,1 +1,1 @@
-It consists of the ideation phase levels
+It consists about the documentation of ideation phase.
