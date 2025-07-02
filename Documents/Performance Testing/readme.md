@@ -1,1 +1,1 @@
-It consists of testing phase levels.
+It consists of docunetation about the project design phase.
