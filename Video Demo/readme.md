@@ -1,1 +1,1 @@
-It consists of the video deom of the project.
+It consists of the video demo of the project.
