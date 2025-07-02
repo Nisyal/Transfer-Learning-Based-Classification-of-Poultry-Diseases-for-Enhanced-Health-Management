@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Poultry Disease Predictor</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background-color: #000;
+      color: white;
+      font-family: 'Playfair Display', serif;
+    }
+    header {
+      background-color: #111;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 40px;
+    }
+    .logo {
+      font-size: 30px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+    }
+    .logo i {
+      border: 2px solid #27c79a;
+      border-radius: 50%;
+      padding: 6px;
+      color: #27c79a;
+      margin-right: 10px;
+      font-size: 15px;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 30px;
+    }
+    nav a {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+    }
+    nav a:hover {
+      color: #00ffcc;
+    }
+    .hero {
+      text-align: center;
+      padding: 50px 20px;
+    }
+    .hero h1 {
+      font-size: 28px;
+      line-height: 1.6;
+    }
+    .btn {
+      background-color: #27c79a;
+      color: white;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      margin-top: 30px;
+      cursor: pointer;
+    }
+    .gallery {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 30px 0;
+    }
+    .gallery img {
+      width: 200px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+    .prediction-section {
+      display: none;
+      text-align: center;
+      padding: 60px 20px;
+    }
+    .upload-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 30px;
+    }
+    .upload-form input[type="file"] {
+      width: 300px;
+      padding: 10px;
+      margin: 20px 0;
+    }
+    .result-text {
+      margin-top: 30px;
+      font-size: 20px;
+      color: #00ff88;
+    }
+    .image-preview img {
+      margin-top: 20px;
+      width: 250px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo"><i class="fas fa-camera"></i> Poultry Detect</div>
+    <nav>
+      <ul>
+        <li><a href="#" onclick="goHome()">HOME</a></li>
+        <li><a href="#" onclick="goToPredict()">PREDICTION PAGE</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="hero" id="homeSection">
+    <h1>Welcome to Poultry Health Hub,<br/>your comprehensive resource for<br/>poultry disease management and prevention.</h1>
+    <button class="btn" onclick="goToPredict()">GET STARTED</button>
+    <div class="gallery">
+      <img src="{{ url_for('static', filename='images/Coccidiosis.jpg') }}" alt="Coccidiosis">
+      <img src="{{ url_for('static', filename='images/NewCastle.jpg') }}" alt="New Castle Disease">
+      <img src="{{ url_for('static', filename='images/Salmonella.jpg') }}" alt="Salmonella">
+      <img src="{{ url_for('static', filename='images/Healthy.jpg') }}" alt="Healthy">
+    </div>
+  </section>
+
+  <section class="prediction-section" id="predictSection">
+    <h1>Prediction</h1>
+    <h2>Image Classification</h2>
+    <form class="upload-form" onsubmit="handlePrediction(event)">
+      <label for="imageUpload">Upload Your Image :</label>
+      <input type="file" id="imageUpload" accept="image/*" required />
+      <button type="submit" class="btn">Predict</button>
+    </form>
+    <div class="result-text" id="resultText"></div>
+    <div class="image-preview" id="imagePreview"></div>
+  </section>
+
+  <script>
+    function goToPredict() {
+      document.getElementById('homeSection').style.display = 'none';
+      document.getElementById('predictSection').style.display = 'block';
+    }
+
+    function goHome() {
+      document.getElementById('predictSection').style.display = 'none';
+      document.getElementById('homeSection').style.display = 'block';
+    }
+
+    function handlePrediction(event) {
+      event.preventDefault();
+      const fileInput = document.getElementById('imageUpload');
+      const resultText = document.getElementById('resultText');
+      const preview = document.getElementById('imagePreview');
+      const file = fileInput.files[0];
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          preview.innerHTML = `<img src="${e.target.result}" alt="Preview" />`;
+        };
+        reader.readAsDataURL(file);
+
+        // Dummy prediction logic
+        const name = file.name.toLowerCase();
+        let result = 'Unknown';
+        if (name.includes('sick')) result = 'Sick Chicken';
+        else if (name.includes('brown')) result = 'Brown Chick';
+        else if (name.includes('coc')) result = 'Coccidiosis';
+        else if (name.includes('farm')) result = 'Chickens on Farm';
+
+        resultText.innerHTML = `Hence, the infection type detected as <strong>${result}</strong>`;
+      }
+    }
+  </script>
+</body>
+</html>
